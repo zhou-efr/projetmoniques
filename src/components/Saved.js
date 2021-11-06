@@ -12,7 +12,7 @@ class Saved extends Component {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: backgroundColor,
+          // backgroundColor: backgroundColor,
         }}>
         <Text>Saved</Text>
       </View>

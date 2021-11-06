@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
+  ImageBackground,
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
@@ -11,13 +13,49 @@ import {
 import {RNCamera} from 'react-native-camera';
 
 import SearchIcon from '../files/images/icons/search.png';
+import background from '../files/images/img_1.png';
 
 const backgroundColor = '#BDC8C0';
+const testList = ['abcd', 'bcd', 'cdab', 'dabc', 'efgh', 'fgh', 'ghij'];
 
-class Scan extends Component {
-  render() {
-    return (
-      <View style={styles.scanContainer}>
+function Scan(props) {
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+  const [textInputValue, setTextInputValue] = useState(undefined);
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus(false);
+      setSuggestions([]);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const handleText = e => {
+    let tempSuggestions = [];
+    // console.log('suggestions : ', suggestions);
+
+    for (let i of testList) {
+      if (i.includes(e)) {
+        tempSuggestions.push(i);
+      }
+    }
+    // console.log('tempSuggestions : ', tempSuggestions);
+
+    setSuggestions(tempSuggestions);
+    setTextInputValue(e);
+  };
+
+  return (
+    <View style={styles.scanContainer}>
+      {!keyboardStatus && (
         <View style={styles.northenContainer}>
           <Text style={styles.headerText}>
             Pour avoir les informations d’un {'\n'}
@@ -42,10 +80,14 @@ class Scan extends Component {
             />
           </View>
         </View>
+      )}
+      <View style={styles.outerSearchBarContainer}>
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchBarComponent}
             placeholder={'Rechercher un médicament'}
+            value={textInputValue}
+            onChangeText={e => handleText(e)}
           />
           <View style={styles.searchButtonContainer}>
             <TouchableOpacity style={styles.searchButton}>
@@ -53,18 +95,60 @@ class Scan extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        {!!suggestions.length && (
+          <View style={styles.suggestionsContainer}>
+            {suggestions.map((suggestion, index) => {
+              // console.log(suggestion);
+              return (
+                <Text
+                  key={index}
+                  style={styles.suggestionsText}
+                  onPress={event => {
+                    setTextInputValue(suggestion);
+                    handleText(suggestion);
+                  }}>
+                  {suggestion}
+                </Text>
+              );
+            })}
+          </View>
+        )}
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  suggestionsContainer: {
+    width: '100%',
+    alignItems: 'flex-start',
+    flexDirection: 'column',
+    marginTop: 2,
+    backgroundColor: '#ffffff5F',
+    borderRadius: 10,
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  suggestionsText: {
+    padding: 2,
+    paddingLeft: 4,
+    marginLeft: 5,
+    fontSize: 15,
+  },
+  imageBackgroundContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    height: Dimensions.get('screen').height,
+    overflow: 'visible',
+  },
   scanContainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: backgroundColor,
+    backgroundColor: '#ffffff00',
   },
   northenContainer: {
     flexDirection: 'column',
@@ -81,7 +165,9 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: '#000',
     borderWidth: 2,
-    backgroundColor: backgroundColor,
+    // backgroundColor: backgroundColor,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 20,
     padding: 3,
   },
@@ -95,9 +181,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
     backgroundColor: '#ffffff5F',
-    width: '80%',
     borderRadius: 10,
+  },
+  outerSearchBarContainer: {
+    width: '80%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   searchBarComponent: {
     width: '80%',

@@ -12,7 +12,7 @@ class Compare extends Component {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: backgroundColor,
+          // backgroundColor: backgroundColor,
         }}>
         <Text>Compare</Text>
       </View>
