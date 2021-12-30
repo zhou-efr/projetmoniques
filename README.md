@@ -1,6 +1,5 @@
 # Medicinery
 ![react-native](https://img.shields.io/badge/react--native-0.66.0-blue)
-![react-navigation/bottom-tabs](https://img.shields.io/badge/react--navigation%2Fbottom--tabs-6.0.9-yellow)
 ![react-native-camera](https://img.shields.io/badge/react--native--camera-4.2.1-yellowgreen)
 ## development mode
 Run `npm install` within the project folder. <br/><br/>

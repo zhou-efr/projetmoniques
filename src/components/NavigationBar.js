@@ -1,8 +1,26 @@
-import React, {Component, useEffect, useState} from 'react';
-import {Keyboard, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  Keyboard,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const backgroundColor = '#BDC8C0';
 const frontColor = '#fff';
+const BIG = '90%';
+const SMALL = '75%';
+const colors = {
+  Compare: '#A5D4D8',
+  Scan: '#F99158',
+  Saved: '#E05B41',
+};
+const navButtonIcons = {
+  Compare: require('../files/images/icons/MedicineIcon.png'),
+  Scan: require('../files/images/icons/Bulk.png'),
+  Saved: require('../files/images/icons/Vector.png'),
+};
 
 function NavigationBar({state, descriptors, navigation}) {
   const [keyboardStatus, setKeyboardStatus] = useState(undefined);
@@ -58,16 +76,15 @@ function NavigationBar({state, descriptors, navigation}) {
                   key={index}
                   onPress={onPress}
                   testID={options.tabBarTestID}>
-                  <View style={styles.outerButton}>
-                    <View
-                      style={[
-                        styles.innerButton,
-                        {
-                          backgroundColor: isFocused ? '#ffffff00' : frontColor,
-                        },
-                      ]}>
-                      <Text>{label[0]}</Text>
-                    </View>
+                  <View
+                    style={[
+                      styles.innerButton,
+                      {
+                        height: isFocused ? BIG : SMALL,
+                        backgroundColor: colors[label],
+                      },
+                    ]}>
+                    <Image source={navButtonIcons[label]} />
                   </View>
                 </TouchableOpacity>
               );
@@ -93,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: '75%',
-    borderRadius: 20,
+    borderRadius: 100,
   },
   outerButton: {
     alignItems: 'center',
@@ -106,9 +123,8 @@ const styles = StyleSheet.create({
   innerButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: '80%',
     aspectRatio: 1,
-    borderRadius: 15,
+    borderRadius: 100,
   },
 });
 
