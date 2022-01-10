@@ -24,7 +24,12 @@ class Medicine extends Component {
     }
   }
 
-  toggleVisible = () => {
+  toggleVisible = async () => {
+    try {
+      await this.is_saved(this.props.data);
+    } catch (err) {
+      console.log(err);
+    }
     this.props.toggleVisible();
   };
 

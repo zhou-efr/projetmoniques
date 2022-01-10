@@ -32,8 +32,6 @@ function Scan(props) {
   const [showModal, setModal] = useState(false);
   const [data, setData] = useState(undefined);
 
-  // TODO: handle modal
-
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       setKeyboardStatus(true);
